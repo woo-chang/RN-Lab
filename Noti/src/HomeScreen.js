@@ -61,7 +61,7 @@ const HomeScreen = () => {
 
     const sendNotification = async() => {
         const message = {
-          to: "ExponentPushToken[UDSmaGGw0Yio729dU9gdpq]", // 디바이스에서 확인할 수 있는 토근을 입력
+          to: "token", // 디바이스에서 확인할 수 있는 토근을 입력
           // 실제 앱에 적용한다면 토큰을 인자로 받아서 전송할 수 있도록 처리
           sound: "default",
           title: "Expo Noti Programming",
