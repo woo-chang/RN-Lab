@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
 import { View, SafeAreaView, StyleSheet, Alert, Pressable, Platform, Linking } from 'react-native';
 import { WebView } from 'react-native-webview';
 import { Ionicons } from '@expo/vector-icons';
@@ -15,29 +15,42 @@ const HomeScreen = () => {
 
     // const html = `
     //     <script>
-    //         function send() {
-    //             ReactNativeWebView.postMessage('hello react-native!!');
+    //         function send(event) {
+    //             ReactNativeWebView.postMessage(event.data);
     //             // 리액트 네이티브 웹 뷰로 데이터를 보내는 코드
     //         }
 
 
     //         window.addEventListener('message', function(event) {
-    //             send();
-    //         });
+    //             send(event);
+    //         }, false);
     //     </script>
     //     <button class='b' onClick='send()'>Send</button>
     // `;
     // // 연습용 코드
 
-    const pressButton = () => {
-        // Web으로 메세지 보내는 코드
-        // webRef.current.postMessage("카카오톡 버튼 클릭");
+    const chatButton = () => {
+        // 뒤로 가야한다면 뒤로 가기
         if(canGoBack) {
             webRef.current.goBack();
-            alert('뒤로 이동하였습니다.')
-        } else {
-            alert('더이상 뒤로 갈 수 없습니다.')
         }
+        // 뒤로 가는동안 생기는 딜레이를 위한 timeOut
+        setTimeout(() => {
+            webRef.current.postMessage("채팅시작");
+        }, 50)
+        
+    }
+
+    const channelButton = () => {
+        // 뒤로 가야한다면 뒤로 가기
+        if(canGoBack) {
+            webRef.current.goBack();
+        }
+        // 뒤로 가는동안 생기는 딜레이를 위한 timeOut
+        setTimeout(() => {
+            // Web으로 메세지 보내는 코드
+            webRef.current.postMessage("채널추가");
+        }, 50)
     }
 
     const onShouldStartLoadWithRequest = (event) => {
@@ -66,6 +79,12 @@ const HomeScreen = () => {
 
     const onNavigationStateChange = (navState) => {
         setCanGoBack(navState.canGoBack);
+        // const isExternal = externalUrlList.reduce((acc, eUrl) => acc ? acc : navState.url.includes(eUrl), false);
+
+        // if(isExternal) {
+        //     Linking.openURL(navState.url).then();
+        //     return false;
+        // }
     }
 
     return (
@@ -73,9 +92,10 @@ const HomeScreen = () => {
             {/* <View style={{width: 130, height: 115}}> (WebView 높이 조절) */}
                 <WebView
                     ref={webRef}
+                    style={{opacity: 0}}
                     // automaticallyAdjustContentInsets={false} -> WebView 높이 조절 가능하도록 (상위 컴포넌트에 의해)
-                    source={{uri: key[0].uriSource}} // 보여주고자 하는 uri
-                    onMessage={(event) => Alert.alert(event.nativeEvent.data)}
+                    source={{ uri: key[0].uriSource }} // 보여주고자 하는 uri
+                    // onMessage={(event) => Alert.alert(event.nativeEvent.data)} -> 메세지 수신되었을 때 동작
                     javaScriptEnabled={true} // 자바스크립트를 사용할 수 있도록 ?
                     //injectedJavaScript={jsCode} // 시작할 때
                     originWhitelist={['kakaoplus://', 'https://*', 'http://*', 'intent://*']}
@@ -85,12 +105,17 @@ const HomeScreen = () => {
                     onNavigationStateChange={onNavigationStateChange}
                 />
             {/* </View> */}
+
             <View style={styles.bottom}>
-                <Pressable style={{backgroundColor: 'red'}} onPress={pressButton}>
+                <Pressable style={{backgroundColor: 'red'}} onPress={chatButton}>
                     <Ionicons name="arrow-back" size={24} color='white'/>
                 </Pressable>
-                <Ionicons name="arrow-down" size={24} color='white'/>
-                <Ionicons name="arrow-forward" size={24} color='white'/>
+                <Pressable style={{backgroundColor: 'red'}}>
+                    <Ionicons name="arrow-down" size={24} color='white'/>
+                </Pressable>
+                <Pressable style={{backgroundColor: 'red'}} onPress={channelButton}>
+                    <Ionicons name="arrow-forward" size={24} color='white'/>
+                </Pressable>
             </View>
         </SafeAreaView>
     )
