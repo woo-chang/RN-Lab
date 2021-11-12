@@ -79,12 +79,6 @@ const HomeScreen = () => {
 
     const onNavigationStateChange = (navState) => {
         setCanGoBack(navState.canGoBack);
-        // const isExternal = externalUrlList.reduce((acc, eUrl) => acc ? acc : navState.url.includes(eUrl), false);
-
-        // if(isExternal) {
-        //     Linking.openURL(navState.url).then();
-        //     return false;
-        // }
     }
 
     return (
