@@ -83,10 +83,10 @@ const HomeScreen = () => {
 
     return (
         <SafeAreaView style={styles.container}>
-            {/* <View style={{width: 130, height: 115}}> (WebView 높이 조절) */}
+            <View style={{width: 100, height: 100, zIndex: 0}}>
                 <WebView
                     ref={webRef}
-                    style={{opacity: 0}}
+                    // style={{opacity: 0}}
                     // automaticallyAdjustContentInsets={false} -> WebView 높이 조절 가능하도록 (상위 컴포넌트에 의해)
                     source={{ uri: key[0].uriSource }} // 보여주고자 하는 uri
                     // onMessage={(event) => Alert.alert(event.nativeEvent.data)} -> 메세지 수신되었을 때 동작
@@ -98,7 +98,11 @@ const HomeScreen = () => {
                     }}
                     onNavigationStateChange={onNavigationStateChange}
                 />
-            {/* </View> */}
+            </View>
+
+            <Pressable style={{position: 'absolute', backgroundColor: 'yellow', width: 100, height: 150, zIndex: 1}} onPress={chatButton}>
+
+            </Pressable>
 
             <View style={styles.bottom}>
                 <Pressable style={{backgroundColor: 'red'}} onPress={chatButton}>
@@ -118,7 +122,7 @@ const HomeScreen = () => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: 'red'
+        backgroundColor: 'red',
     },
     bottom: {
         width: '100%',
