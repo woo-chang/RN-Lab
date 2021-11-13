@@ -30,12 +30,9 @@ const HomeScreen = () => {
                 console.log('아무것도 속하지 않음');
             }
 
-            console.log(firstFollow)
-            console.log(inWord)
         })
 
         setResult(firstFollow + inWord)
-        console.log(result);
 
     }, [text])
 
