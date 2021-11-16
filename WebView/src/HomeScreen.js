@@ -13,21 +13,37 @@ const HomeScreen = () => {
     // const jsCode = `document.querySelector('.b').click();`;
     // // 클래스가 b인 태그 찾아서 색상을 보라색으로 변경하는 코드
 
-    // const html = `
-    //     <script>
-    //         function send(event) {
-    //             ReactNativeWebView.postMessage(event.data);
-    //             // 리액트 네이티브 웹 뷰로 데이터를 보내는 코드
-    //         }
+    const html = `
+        <script>
+            function send(event) {
+                if(event.data == "채팅시작") {
+                    ReactNativeWebView.postMessage(event.data);
+                    // 리액트 네이티브 웹 뷰로 데이터를 보내는 코드
+                }
+            }
+
+            // iOS
+            window.addEventListener('message', function(event) {
+                send(event);
+            }, false);
 
 
-    //         window.addEventListener('message', function(event) {
-    //             send(event);
-    //         }, false);
-    //     </script>
-    //     <button class='b' onClick='send()'>Send</button>
-    // `;
-    // // 연습용 코드
+            // Android
+            document.addEventListener('message', function(event) {
+                send(event);
+            })
+        </script>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <button class='b' onClick='send(event)'>Send</button>
+        <button class='b' onClick='send(event)'>Send</button>
+        <button class='b' onClick='send(event)'>Send</button>
+    `;
+    // 연습용 코드
 
     const chatButton = () => {
         // 뒤로 가야한다면 뒤로 가기
@@ -83,12 +99,12 @@ const HomeScreen = () => {
 
     return (
         <SafeAreaView style={styles.container}>
-            <View style={{width: 100, height: 100, zIndex: 0}}>
+            <View style={{width: 300, height: 300, zIndex: 0}}>
                 <WebView
                     ref={webRef}
                     // style={{opacity: 0}}
                     // automaticallyAdjustContentInsets={false} -> WebView 높이 조절 가능하도록 (상위 컴포넌트에 의해)
-                    source={{ uri: key[0].uriSource }} // 보여주고자 하는 uri
+                    source={{ html }} // 보여주고자 하는 uri
                     // onMessage={(event) => Alert.alert(event.nativeEvent.data)} -> 메세지 수신되었을 때 동작
                     javaScriptEnabled={true} // 자바스크립트를 사용할 수 있도록 ?
                     //injectedJavaScript={jsCode} // 시작할 때
@@ -97,12 +113,13 @@ const HomeScreen = () => {
                         return onShouldStartLoadWithRequest(event);
                     }}
                     onNavigationStateChange={onNavigationStateChange}
+                    onMessage={(event) => console.log(event)}
                 />
             </View>
 
-            <Pressable style={{position: 'absolute', backgroundColor: 'yellow', width: 100, height: 150, zIndex: 1}} onPress={chatButton}>
+            {/* <Pressable style={{position: 'absolute', backgroundColor: 'yellow', width: 100, height: 150, zIndex: 1}} onPress={chatButton}>
 
-            </Pressable>
+            </Pressable> */}
 
             <View style={styles.bottom}>
                 <Pressable style={{backgroundColor: 'red'}} onPress={chatButton}>
