@@ -1,66 +1,22 @@
 import React, { useState, useEffect } from 'react';
-import { Text, View, SafeAreaView, TextInput, StyleSheet, FlatList } from 'react-native';
+import { Text, View, SafeAreaView, TextInput, StyleSheet, FlatList } from 'react-native'
+import SearchInput, { createFilter } from 'react-native-search-filter';;
 import SearchDataList from './data/SearchDataList';
 import FlatListItem from './FlatListItem';
+const KEYS_TO_FILTERS = ['name'];
 
 const HomeScreen = () => {
 
-    const [text, setText] = useState(null);
-    const [firstFollow, setFirstFollow] = useState([]);
-    const [inWord, setInWord] = useState([]);
-    const [result, setResult] = useState([]);
+    const [text, setText] = useState(' ')
 
-    // text가 변할때 마다 일어나는 동작
-    useEffect(() => {
-
-        console.log(text)
-        setFirstFollow([])
-        setInWord([])
-        setResult([])
-
-        SearchDataList.map((item) => {
-            console.log(item)
-            if(matchName(item.name)) {
-                console.log('match')
-                setFirstFollow([item]);
-            } else if(inName(item.name)) {
-                console.log('hello')
-                setInWord([item]);
-            } else {
-                console.log('아무것도 속하지 않음');
-            }
-
-        })
-
-        setResult(firstFollow + inWord)
-
-    }, [text])
-
-    const matchName = (name) => {
-        if(text == null) return false;
-        const textLen = text.length;
-        name = name.toLowerCase().substring(0, textLen);
-        return name == text && textLen != 0;
-    }
-    
-    const inName = (name) => {
-        if(text == null) return false;
-        const textLen = text.length;
-        name = name.toLowerCase();
-        return name.includes(text) && textLen != 0;
-    }
-
-    const changeText = (text) => {
-        setText(text)
-    }
+    const result = SearchDataList.filter(createFilter(text, KEYS_TO_FILTERS));
 
     return (
         <SafeAreaView>
-            <TextInput
-                style={styles.input}
-                value={text}
-                onChangeText={changeText}
-                placeholder="Search..."
+            <SearchInput
+                onChangeText={(term) => setText(term)}
+                style={styles.searchInput}
+                placeholder="Type a message to search"
             />
 
             <View style={styles.line}/>
@@ -87,6 +43,11 @@ const styles = StyleSheet.create({
         width: '100%',
         height: 10,
         backgroundColor: 'red'
+    },
+    searchInput:{
+        padding: 10,
+        borderColor: '#CCC',
+        borderWidth: 1
     }
 })
 
