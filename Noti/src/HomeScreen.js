@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react'
-import { Text, View, Pressable, StyleSheet } from 'react-native'
+import { Text, View, Pressable, StyleSheet, Linking, Platform } from 'react-native'
 
 import * as Notifications from 'expo-notifications'
 import * as Permissions from 'expo-permissions'
@@ -80,9 +80,23 @@ const HomeScreen = () => {
         });
     }
 
+    const kakaoCert = () => {
+      const initialURL = 'exp://192.168.0.42:19000'
+
+      console.log(initialURL)
+
+      const url = `kakaotalk://kakaopay/cert/sign?tx_id=baf12b7c02ea44c3806813c0f4a9ee92&success=${initialURL}&fail=${initialURL}`
+  
+      if(Platform.OS === 'android') {
+          Linking.openURL(url)
+      } else {
+          Linking.openURL(url)
+      }
+    }
+
     return (
         <View style={styles.container}>
-            <Pressable style={styles.button} onPress={sendNotification}>
+            <Pressable style={styles.button} onPress={kakaoCert}>
                 <Text style={{color: 'white', fontSize: 16}}>Button</Text>
             </Pressable>
         </View>
